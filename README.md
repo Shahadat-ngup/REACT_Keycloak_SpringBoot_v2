@@ -1,265 +1,335 @@
-# Keycloak OAuth2 PKCE Demo Application
+# React + Spring Boot + Keycloak OAuth2 Demo Application
 
-This project demonstrates a secure login mechanism using Keycloak with PKCE (Proof Key for Code Exchange) flow. The a3. Access via `http://oauth2-demo.local:4006`plication consists of a React frontend and a Spring Boot backend, following MVVM architecture principles and best practices.
+A full-stack demonstration of secure authentication using **React** frontend with **Spring Boot** backend, integrated with **Keycloak** using **PKCE (Proof Key for Code Exchange)** OAuth2 flow.
 
-## 🏗️ Architecture
+## 🏗️ Architecture Overview
 
-- **Frontend**: React with TypeScript (MVVM Architecture)
-- **Backend**: Spring Boot with OAuth2 Resource Server
-- **Authentication**: Keycloak with PKCE flow
-- **Security**: JWT token validation, CORS configuration
-
-## 🚀 Features
-
-- ✅ Custom login page with Keycloak OAuth2 PKCE flow
-- ✅ Secure JWT token handling
-- ✅ Protected routes and API endpoints
-- ✅ User profile management
-- ✅ Responsive design for mobile and desktop
-- ✅ CORS configuration for cross-origin requests
-- ✅ Network-accessible for remote devices
-- ✅ Health monitoring and error handling
-
-## 📋 Prerequisites
-
-- **Node.js** (v16 or higher)
-- **Java** (v17 or higher)
-- **Maven** (v3.6 or higher)
-- **Keycloak** server running with configured realm
-
-## 🔧 Configuration
-
-### Keycloak Setup
-
-The application is configured to work with the following Keycloak settings:
-
-- **Keycloak URL**: `https://keycloak.ccom.ipb.pt:8443`
-- **Realm**: `ipbStudents`
-- **Client ID**: `springKeycloakOauth2APP`
-- **Valid Redirect URLs**: `http://oauth2-demo.local:4006/*`
-- **Post Logout Redirect URLs**: `http://oauth2-demo.local:4006/*`
-- **Web Origins**: `http://oauth2-demo.local:4006`
-
-### Host Configuration
-
-For network accessibility, add the following to your `/etc/hosts` file:
-
-```bash
-# Add your machine's IP address
-192.168.1.100 oauth2-demo.local  # Replace with your actual IP
+```
+┌─────────────────┐    OAuth2/PKCE    ┌─────────────────┐    JWT Validation    ┌─────────────────┐
+│   React SPA     │ ◄─────────────── │    Keycloak     │ ◄─────────────────► │   Spring Boot   │
+│  (Frontend)     │                   │   Auth Server   │                     │   (Backend)     │
+│                 │ ◄─────────────────────────────────── │                     │                 │
+│ Port: 4006      │           Protected API Calls        │                     │ Port: 8080      │
+└─────────────────┘                                      └─────────────────────┘                 └─────────────────┘
 ```
 
-## 🚀 Getting Started
+## 🚀 Technologies Used
 
-### 1. Clone the Repository
+### Frontend (React)
+- **React 19.1** with TypeScript
+- **React Router 6.30** for client-side routing
+- **Axios 1.10** for HTTP requests
+- **Custom PKCE Implementation** for OAuth2 security
+- **MVVM Architecture** with React Context for state management
+- **CSS3** with responsive design
 
-```bash
-git clone <repository-url>
-cd React_Springboot_Keycloak
-```
+### Backend (Spring Boot)
+- **Spring Boot 3.2.0** with Java 17
+- **Spring Security 6.x** with OAuth2 Resource Server
+- **Spring Web** for REST API
+- **Spring Boot Actuator** for health monitoring
+- **Jackson** for JSON processing
+- **Maven** for dependency management
 
-### 2. Backend Setup
-
-```bash
-cd backend
-
-# Install dependencies and run
-mvn clean install
-mvn spring-boot:run
-```
-
-The backend will start on `http://oauth2-demo.local:8080`
-
-### 3. Frontend Setup
-
-```bash
-cd frontend
-
-# Install dependencies
-npm install
-
-# Start the development server
-npm start
-```
-
-The frontend will start on `http://oauth2-demo.local:4006`
+### Authentication & Security
+- **Keycloak** as OAuth2/OpenID Connect provider
+- **PKCE (Proof Key for Code Exchange)** flow for enhanced security
+- **JWT tokens** for stateless authentication
+- **CORS** configuration for cross-origin requests
 
 ## 📁 Project Structure
 
 ```
 React_Springboot_Keycloak/
-├── frontend/                    # React TypeScript frontend
-│   ├── src/
-│   │   ├── components/         # React components
-│   │   │   ├── LoginPage.tsx   # Custom login page
-│   │   │   ├── CallbackPage.tsx # OAuth callback handler
-│   │   │   ├── Dashboard.tsx    # Main dashboard
-│   │   │   └── ProtectedRoute.tsx # Route protection
-│   │   ├── services/           # Business logic services
-│   │   │   ├── authService.ts  # PKCE authentication
-│   │   │   └── apiService.ts   # API communication
-│   │   ├── viewmodels/         # MVVM view models
-│   │   │   ├── authViewModel.ts     # Authentication state
-│   │   │   └── dashboardViewModel.ts # Dashboard logic
-│   │   └── config.ts           # Application configuration
-│   ├── public/
-│   └── package.json
-├── backend/                     # Spring Boot backend
-│   ├── src/main/java/com/example/keycloak/
-│   │   ├── config/             # Security configuration
-│   │   ├── controller/         # REST controllers
-│   │   ├── dto/                # Data transfer objects
-│   │   ├── service/            # Business services
-│   │   └── KeycloakDemoApplication.java
-│   ├── src/main/resources/
-│   │   └── application.properties
-│   └── pom.xml
-└── README.md
+├── README.md                 # This comprehensive guide
+├── QUICKSTART.md            # Quick setup instructions
+├── .gitignore               # Git ignore rules
+│
+├── frontend/                # React TypeScript SPA
+│   ├── package.json         # Frontend dependencies
+│   ├── tsconfig.json        # TypeScript configuration
+│   ├── public/              # Static assets
+│   └── src/
+│       ├── config.ts        # 🔧 Keycloak & API configuration
+│       ├── App.tsx          # Main application component
+│       ├── contexts/
+│       │   └── AuthContext.tsx     # 🔧 Authentication state management
+│       ├── services/
+│       │   ├── authService.ts      # 🔧 PKCE OAuth2 implementation
+│       │   └── apiService.ts       # API communication service
+│       ├── components/
+│       │   ├── LoginPage.tsx       # Login interface
+│       │   ├── CallbackPage.tsx    # OAuth2 callback handler
+│       │   ├── Dashboard.tsx       # Protected dashboard
+│       │   ├── ProtectedRoute.tsx  # Route protection
+│       │   └── DebugPage.tsx       # Keycloak debug tools
+│       └── viewmodels/             # MVVM pattern implementation
+│           ├── authViewModel.ts
+│           └── dashboardViewModel.ts
+│
+└── backend/                 # Spring Boot REST API
+    ├── pom.xml              # Maven dependencies
+    └── src/main/
+        ├── resources/
+        │   └── application.properties  # 🔧 Backend configuration
+        └── java/com/example/keycloak/
+            ├── KeycloakDemoApplication.java  # Main application
+            ├── config/
+            │   └── SecurityConfig.java      # 🔧 OAuth2 & CORS config
+            ├── controller/
+            │   ├── HealthController.java    # Health check endpoint
+            │   ├── UserController.java      # User profile API
+            │   ├── ProtectedController.java # Protected endpoints
+            │   └── GlobalExceptionHandler.java
+            ├── service/
+            │   └── UserService.java         # Business logic
+            └── dto/
+                ├── ApiResponse.java         # Response wrapper
+                └── UserProfileDto.java      # User data transfer
 ```
 
-## 🔐 Security Features
+## 🔧 Configuration Files
 
-### PKCE Flow Implementation
+### 🎯 Key Configuration Files to Modify
 
-The application implements OAuth2 PKCE flow for enhanced security:
+#### 1. Frontend Configuration: `frontend/src/config.ts`
+```typescript
+export const keycloakConfig: KeycloakConfig = {
+  baseUrl: 'https://your-keycloak-server:port',    // Keycloak server URL
+  realm: 'your-realm-name',                        // Your Keycloak realm
+  clientId: 'your-client-id',                      // Your Keycloak client ID
+  redirectUri: 'http://localhost:4006/callback',   // Callback URL
+  postLogoutRedirectUri: 'http://localhost:4006/', // Post-logout URL
+};
 
-1. **Code Verifier Generation**: Cryptographically random string
-2. **Code Challenge**: SHA256 hash of the code verifier
-3. **State Parameter**: CSRF protection
-4. **Token Exchange**: Secure token retrieval using code verifier
+export const apiConfig = {
+  baseURL: 'http://localhost:8080',                // Backend API URL
+};
+```
 
-### JWT Token Handling
+#### 2. Backend Configuration: `backend/src/main/resources/application.properties`
+```properties
+# Server Configuration
+server.port=8080
+server.address=0.0.0.0
 
-- Automatic token refresh
-- Secure token storage
-- Token validation on backend
-- Role-based access control
+# CORS Configuration (allow frontend access)
+app.cors.allowed-origins=http://localhost:4006
+app.cors.allowed-methods=GET,POST,PUT,DELETE,OPTIONS
+app.cors.allowed-headers=*
+app.cors.allow-credentials=true
 
-## 🌐 API Endpoints
+# OAuth2 Resource Server (JWT validation)
+spring.security.oauth2.resourceserver.jwt.issuer-uri=https://your-keycloak-server:port/realms/your-realm
+spring.security.oauth2.resourceserver.jwt.jwk-set-uri=https://your-keycloak-server:port/realms/your-realm/protocol/openid-connect/certs
+
+# Keycloak Configuration
+keycloak.realm=your-realm-name
+keycloak.auth-server-url=https://your-keycloak-server:port
+keycloak.client-id=your-client-id
+```
+
+#### 3. Security Configuration: `backend/src/main/java/com/example/keycloak/config/SecurityConfig.java`
+- Configures JWT token validation
+- Sets up CORS policies
+- Defines protected vs public endpoints
+- Maps Keycloak roles to Spring Security authorities
+
+## 🔐 Keycloak Setup Guide
+
+### 1. Create Keycloak Realm
+1. Access your Keycloak admin console
+2. Create a new realm (e.g., `ipbStudents`)
+3. Configure realm settings as needed
+
+### 2. Create Keycloak Client
+1. Go to **Clients** → **Create Client**
+2. Set **Client ID**: `springKeycloakOauth2APP` (or your preferred name)
+3. **Client Type**: `OpenID Connect`
+4. **Client authentication**: `Off` (public client for PKCE)
+
+### 3. Configure Client Settings
+```
+Standard Flow Enabled: ON
+Direct Access Grants Enabled: OFF
+Implicit Flow Enabled: OFF
+Service Accounts Enabled: OFF
+
+Valid Redirect URIs: 
+  - http://localhost:4006/*
+  - http://localhost:4006/callback
+
+Valid Post Logout Redirect URIs:
+  - http://localhost:4006/*
+
+Web Origins:
+  - http://localhost:4006
+
+Advanced Settings:
+  - Proof Key for Code Exchange Code Challenge Method: S256
+```
+
+### 4. Create Test Users
+1. Go to **Users** → **Add User**
+2. Set username, email, first name, last name
+3. Go to **Credentials** tab → Set password
+4. Assign roles as needed
+
+## 🚀 Installation & Setup
+
+### Prerequisites
+- **Node.js** 16+ and npm
+- **Java** 17+
+- **Maven** 3.6+
+- Access to a **Keycloak server**
+
+### 1. Clone the Repository
+```bash
+git clone <your-repository-url>
+cd React_Springboot_Keycloak
+```
+
+### 2. Configure Keycloak Settings
+Edit the configuration files mentioned above with your Keycloak server details.
+
+### 3. Install Frontend Dependencies
+```bash
+cd frontend
+npm install
+```
+
+### 4. Install Backend Dependencies
+```bash
+cd ../backend
+mvn clean install
+```
+
+## 🏃‍♂️ Running the Application
+
+### 1. Start the Backend
+```bash
+cd backend
+mvn spring-boot:run
+```
+Backend will be available at: `http://localhost:8080`
+
+### 2. Start the Frontend
+```bash
+cd frontend
+npm start
+```
+Frontend will be available at: `http://localhost:4006`
+
+### 3. Access the Application
+1. Open `http://localhost:4006` in your browser
+2. Click **"Login via Keycloak"**
+3. Enter your Keycloak credentials
+4. You'll be redirected to the dashboard after successful authentication
+
+## 🔍 API Endpoints
 
 ### Public Endpoints
-- `GET /api/health` - Health check
+- `GET /api/health` - Application health check
 
-### Protected Endpoints (Requires Authentication)
-- `GET /api/user/profile` - Get user profile
+### Protected Endpoints (Require Authentication)
+- `GET /api/user/profile` - Get user profile information
 - `GET /api/protected/data` - Get protected data
 - `GET /api/protected/time` - Get server time
 
-## 📱 Network Access
+## 🧪 Testing & Debugging
 
-The application is configured to be accessible from other devices on the same network:
+### Debug Page
+Access `http://localhost:4006/debug` for Keycloak configuration testing:
+- Tests Keycloak connectivity
+- Validates configuration
+- Provides direct authentication URL for testing
 
-1. **Frontend**: Runs on `0.0.0.0:4006` (all interfaces)
-2. **Backend**: Runs on `0.0.0.0:8080` (all interfaces)
-3. **CORS**: Configured for cross-origin requests
-
-To access from other devices:
-1. Find your machine's IP address: `ip addr show` (Linux) or `ipconfig` (Windows)
-2. Update `/etc/hosts` on other devices with your IP
-3. Access via `http://oauth2-demo.local:4000`
-
-## 🛠️ Development
-
-### Frontend Development
-
-```bash
-cd frontend
-
-# Start development server
-npm start
-
-# Build for production
-npm run build
-
-# Run tests
-npm test
-```
-
-### Backend Development
-
-```bash
-cd backend
-
-# Run in development mode
-mvn spring-boot:run
-
-# Build for production
-mvn clean package
-
-# Run tests
-mvn test
-```
-
-## 🔍 Troubleshooting
-
-### Common Issues
-
-1. **CORS Errors**
-   - Verify backend CORS configuration
-   - Check if frontend URL is in allowed origins
-
-2. **Authentication Failures**
-   - Verify Keycloak configuration
-   - Check redirect URLs in Keycloak client settings
-   - Ensure HTTPS is properly configured for Keycloak
-
-3. **Network Access Issues**
-   - Verify `/etc/hosts` configuration
-   - Check firewall settings
-   - Ensure applications are bound to `0.0.0.0`
-
-4. **Token Validation Errors**
-   - Verify JWT issuer URI
-   - Check Keycloak realm settings
-   - Ensure client ID matches
-
-### Debug Mode
-
-Enable debug logging by setting in backend `application.properties`:
-
+### Logging
+Enable debug logging in `application.properties`:
 ```properties
 logging.level.org.springframework.security=DEBUG
 logging.level.com.example.keycloak=DEBUG
 ```
 
-## 🚀 Deployment
+## 🔒 Security Features
 
-### Production Considerations
+- ✅ **PKCE Flow**: Enhanced OAuth2 security for SPAs
+- ✅ **JWT Validation**: Stateless token verification
+- ✅ **CORS Protection**: Configured for cross-origin requests
+- ✅ **Role-based Access**: Keycloak role mapping
+- ✅ **Secure Token Storage**: Browser localStorage with validation
+- ✅ **Automatic Token Refresh**: Seamless token renewal
+- ✅ **Protected Routes**: Client-side route protection
 
-1. **HTTPS**: Configure SSL/TLS for production
-2. **Environment Variables**: Use environment-specific configurations
-3. **Security Headers**: Add security headers for production
-4. **Monitoring**: Set up application monitoring and logging
+## 🎨 Features Implemented
 
-### Docker Deployment (Optional)
+### Frontend Features
+- Modern React 19 with TypeScript
+- MVVM architecture with React Context
+- Responsive design with custom CSS
+- OAuth2 PKCE implementation
+- Automatic authentication state management
+- Protected route handling
+- Error handling and user feedback
 
-Create Docker containers for both frontend and backend for easier deployment across environments.
+### Backend Features
+- RESTful API with Spring Boot 3.2
+- OAuth2 Resource Server configuration
+- JWT token validation
+- CORS configuration
+- Health monitoring with Actuator
+- Global exception handling
+- Role-based authorization
 
-## 📚 Additional Resources
+## 🐛 Troubleshooting
 
+### Common Issues
+
+1. **CORS Errors**
+   - Check `app.cors.allowed-origins` in `application.properties`
+   - Ensure frontend URL is properly configured
+
+2. **Authentication Fails**
+   - Verify Keycloak client configuration
+   - Check redirect URIs match exactly
+   - Ensure PKCE is enabled in Keycloak client
+
+3. **JWT Validation Errors**
+   - Verify `issuer-uri` and `jwk-set-uri` in backend config
+   - Check Keycloak realm accessibility
+
+4. **Port Conflicts**
+   - Frontend: Change PORT in `package.json` scripts
+   - Backend: Change `server.port` in `application.properties`
+
+### Debug Steps
+1. Use the debug page at `/debug`
+2. Check browser console for errors
+3. Review backend logs for JWT validation issues
+4. Verify Keycloak client settings
+
+## 📚 References & Documentation
+
+- [Spring Security OAuth2 Resource Server](https://docs.spring.io/spring-security/reference/servlet/oauth2/resource-server/index.html)
 - [Keycloak Documentation](https://www.keycloak.org/documentation)
 - [OAuth2 PKCE RFC](https://tools.ietf.org/html/rfc7636)
-- [Spring Security OAuth2](https://spring.io/projects/spring-security-oauth)
 - [React Router Documentation](https://reactrouter.com/)
+- [Spring Boot Actuator](https://docs.spring.io/spring-boot/docs/current/reference/html/actuator.html)
 
 ## 🤝 Contributing
 
 1. Fork the repository
 2. Create a feature branch
-3. Commit your changes
-4. Push to the branch
-5. Create a Pull Request
+3. Make your changes
+4. Add tests if applicable
+5. Submit a pull request
 
 ## 📄 License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
 
-## 👥 Authors
+---
 
-- **Keycloak Demo Team** - Initial work
+**Happy Coding!** 🚀
 
-## 🙏 Acknowledgments
-
-- Keycloak community for excellent documentation
-- Spring Boot team for OAuth2 integration
-- React community for frontend frameworks
+For quick setup instructions, see [QUICKSTART.md](./QUICKSTART.md)
