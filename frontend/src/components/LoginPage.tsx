@@ -1,14 +1,35 @@
-import React from 'react';
-import { useAuthViewModel } from '../viewmodels/authViewModel';
+import React, { useEffect } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 import './LoginPage.css';
 
 const LoginPage: React.FC = () => {
-  const { isLoading, error, login, clearError } = useAuthViewModel();
+  const { isAuthenticated, isLoading, error, login, clearError } = useAuth();
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+
+  // Check for error from URL params (from failed callback)
+  const urlError = searchParams.get('error');
+
+  // Redirect to dashboard if already authenticated
+  useEffect(() => {
+    if (!isLoading && isAuthenticated) {
+      navigate('/dashboard');
+    }
+  }, [isAuthenticated, isLoading, navigate]);
 
   const handleLogin = async () => {
     clearError();
     await login();
   };
+
+  // Display either the context error or URL error
+  const displayError = error || urlError;
+
+  // Don't render login form if already authenticated
+  if (!isLoading && isAuthenticated) {
+    return null; // Let the useEffect handle the redirect
+  }
 
   return (
     <div className="login-container">
@@ -18,10 +39,13 @@ const LoginPage: React.FC = () => {
           <p>Please sign in to access the application</p>
         </div>
         
-        {error && (
+        {displayError && (
           <div className="error-message">
-            <span>{error}</span>
-            <button onClick={clearError} className="error-close">×</button>
+            <span>{displayError}</span>
+            <button onClick={() => {
+              clearError();
+              navigate('/', { replace: true });
+            }} className="error-close">×</button>
           </div>
         )}
         

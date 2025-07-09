@@ -4,12 +4,12 @@ export const keycloakConfig: KeycloakConfig = {
   baseUrl: 'https://keycloak.ccom.ipb.pt:8443',
   realm: 'ipbStudents',
   clientId: 'springKeycloakOauth2APP',
-  redirectUri: 'http://oauth2-demo.local:4000/callback',
-  postLogoutRedirectUri: 'http://oauth2-demo.local:4000/',
+  redirectUri: 'http://localhost:4006/callback',
+  postLogoutRedirectUri: 'http://localhost:4006/',
 };
 
 export const apiConfig = {
-  baseURL: process.env.REACT_APP_API_URL || 'http://oauth2-demo.local:8080',
+  baseURL: process.env.REACT_APP_API_URL || 'http://localhost:8080',
 };
 
 export const appConfig = {

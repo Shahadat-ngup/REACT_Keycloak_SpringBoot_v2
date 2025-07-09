@@ -53,6 +53,13 @@ export class KeycloakAuthService {
 
   async initiateLogin(): Promise<void> {
     try {
+      console.log('Initiating login with config:', {
+        baseUrl: this.config.baseUrl,
+        realm: this.config.realm,
+        clientId: this.config.clientId,
+        redirectUri: this.config.redirectUri
+      });
+
       // Generate PKCE parameters
       this.codeVerifier = PKCEUtils.generateCodeVerifier();
       const codeChallenge = await PKCEUtils.generateCodeChallenge(this.codeVerifier);
@@ -72,11 +79,13 @@ export class KeycloakAuthService {
       authUrl.searchParams.set('code_challenge', codeChallenge);
       authUrl.searchParams.set('code_challenge_method', 'S256');
 
+      console.log('Redirecting to:', authUrl.toString());
+
       // Redirect to Keycloak
       window.location.href = authUrl.toString();
     } catch (error) {
       console.error('Error initiating login:', error);
-      throw new Error('Failed to initiate login');
+      throw error; // Re-throw the specific error message
     }
   }
 

@@ -2,7 +2,7 @@
 
 ## 🚀 Getting Started
 
-### Prerequisites
+### 1. Open `htt2. Access via `http://oauth2-demo.local:4006`://localhost:4006` in your browserrerequisites
 - Node.js (v16+)
 - Java 17+
 - Maven 3.6+
@@ -32,7 +32,7 @@ mvn clean install
 mvn spring-boot:run
 ```
 
-Backend will be available at: `http://oauth2-demo.local:8080`
+Backend will be available at: `http://localhost:8080`
 
 ### 2. Start the Frontend
 
@@ -42,11 +42,11 @@ npm install
 npm start
 ```
 
-Frontend will be available at: `http://oauth2-demo.local:4000`
+Frontend will be available at: `http://localhost:4006`
 
 ### 3. Access the Application
 
-1. Open `http://oauth2-demo.local:4000` in your browser
+1. Open `http://localhost:4000` in your browser
 2. Click "Login via Keycloak"
 3. You'll be redirected to Keycloak login page
 4. After successful authentication, you'll be redirected back to the dashboard

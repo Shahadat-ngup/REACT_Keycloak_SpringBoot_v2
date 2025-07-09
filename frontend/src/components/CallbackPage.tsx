@@ -1,34 +1,41 @@
 import React, { useEffect } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
-import { useAuthViewModel } from '../viewmodels/authViewModel';
+import { useAuth } from '../contexts/AuthContext';
 import './CallbackPage.css';
 
 const CallbackPage: React.FC = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const { isLoading, error, handleCallback } = useAuthViewModel();
+  const { isLoading, error, handleCallback } = useAuth();
 
   useEffect(() => {
     const processCallback = async () => {
       const code = searchParams.get('code');
       const state = searchParams.get('state');
       const errorParam = searchParams.get('error');
+      const errorDescription = searchParams.get('error_description');
+
+      console.log('Callback received:', { code: !!code, state: !!state, error: errorParam, errorDescription });
 
       if (errorParam) {
-        console.error('OAuth error:', errorParam);
-        navigate('/?error=' + encodeURIComponent(errorParam));
+        console.error('OAuth error:', errorParam, errorDescription);
+        navigate('/?error=' + encodeURIComponent(`${errorParam}: ${errorDescription || 'Authentication failed'}`));
         return;
       }
 
       if (code && state) {
         try {
+          console.log('Processing callback with code and state...');
           await handleCallback(code, state);
+          console.log('Callback processed successfully, redirecting to dashboard...');
           navigate('/dashboard');
         } catch (error) {
           console.error('Callback processing failed:', error);
-          navigate('/?error=' + encodeURIComponent('Authentication failed'));
+          const errorMessage = error instanceof Error ? error.message : 'Authentication failed';
+          navigate('/?error=' + encodeURIComponent(errorMessage));
         }
       } else {
+        console.error('Missing callback parameters:', { code: !!code, state: !!state });
         navigate('/?error=' + encodeURIComponent('Invalid callback parameters'));
       }
     };

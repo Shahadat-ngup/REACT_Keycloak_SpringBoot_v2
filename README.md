@@ -1,6 +1,6 @@
 # Keycloak OAuth2 PKCE Demo Application
 
-This project demonstrates a secure login mechanism using Keycloak with PKCE (Proof Key for Code Exchange) flow. The application consists of a React frontend and a Spring Boot backend, following MVVM architecture principles and best practices.
+This project demonstrates a secure login mechanism using Keycloak with PKCE (Proof Key for Code Exchange) flow. The a3. Access via `http://oauth2-demo.local:4006`plication consists of a React frontend and a Spring Boot backend, following MVVM architecture principles and best practices.
 
 ## 🏗️ Architecture
 
@@ -36,9 +36,9 @@ The application is configured to work with the following Keycloak settings:
 - **Keycloak URL**: `https://keycloak.ccom.ipb.pt:8443`
 - **Realm**: `ipbStudents`
 - **Client ID**: `springKeycloakOauth2APP`
-- **Valid Redirect URLs**: `http://oauth2-demo.local:4000/*`
-- **Post Logout Redirect URLs**: `http://oauth2-demo.local:4000/*`
-- **Web Origins**: `http://oauth2-demo.local:4000`
+- **Valid Redirect URLs**: `http://oauth2-demo.local:4006/*`
+- **Post Logout Redirect URLs**: `http://oauth2-demo.local:4006/*`
+- **Web Origins**: `http://oauth2-demo.local:4006`
 
 ### Host Configuration
 
@@ -82,7 +82,7 @@ npm install
 npm start
 ```
 
-The frontend will start on `http://oauth2-demo.local:4000`
+The frontend will start on `http://oauth2-demo.local:4006`
 
 ## 📁 Project Structure
 
@@ -149,7 +149,7 @@ The application implements OAuth2 PKCE flow for enhanced security:
 
 The application is configured to be accessible from other devices on the same network:
 
-1. **Frontend**: Runs on `0.0.0.0:4000` (all interfaces)
+1. **Frontend**: Runs on `0.0.0.0:4006` (all interfaces)
 2. **Backend**: Runs on `0.0.0.0:8080` (all interfaces)
 3. **CORS**: Configured for cross-origin requests
 

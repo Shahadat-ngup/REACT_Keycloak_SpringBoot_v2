@@ -1,10 +1,10 @@
 import React from 'react';
-import { useAuthViewModel } from '../viewmodels/authViewModel';
+import { useAuth } from '../contexts/AuthContext';
 import { useDashboardViewModel } from '../viewmodels/dashboardViewModel';
 import './Dashboard.css';
 
 const Dashboard: React.FC = () => {
-  const { user, logout } = useAuthViewModel();
+  const { user, logout } = useAuth();
   const { isLoading, data, error, healthStatus, fetchData, checkHealth, clearError } = 
     useDashboardViewModel();
 
