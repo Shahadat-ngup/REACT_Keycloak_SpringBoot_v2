@@ -2,27 +2,19 @@
 
 ## 🚀 Getting Started
 
-### 1. Open `htt2. Access via `http://oauth2-demo.local:4006`://localhost:4006` in your browserrerequisites
-- Node.js (v16+)
-- Java 17+
-- Maven 3.6+
-- Access to Keycloak server at `https://keycloak.ccom.ipb.pt:8443`
+### Prerequisites
+- **Node.js** (v16+)
+- **Java** 17+
+- **Maven** 3.6+
+- Access to **Keycloak server** at `https://keycloak.ccom.ipb.pt:8443`
 
-### Setup `/etc/hosts` (Important for Network Access)
-Add this line to your `/etc/hosts` file (replace with your actual IP):
-```bash
-# Replace 192.168.1.100 with your machine's IP address
-192.168.1.100 oauth2-demo.local
-```
+### Important: Keycloak Client Configuration
+Before starting, ensure your Keycloak client is configured with:
+- **Valid Redirect URIs**: `http://localhost:4006/*`
+- **Web Origins**: `http://localhost:4006`
+- **PKCE Code Challenge Method**: `S256`
 
-To find your IP address:
-```bash
-# On Linux
-ip addr show | grep 'inet ' | grep -v 127.0.0.1
-
-# On Windows
-ipconfig | findstr "IPv4"
-```
+## 🏃‍♂️ Quick Setup
 
 ### 1. Start the Backend
 
@@ -32,7 +24,7 @@ mvn clean install
 mvn spring-boot:run
 ```
 
-Backend will be available at: `http://localhost:8080`
+✅ Backend will be available at: `http://localhost:8080`
 
 ### 2. Start the Frontend
 
@@ -42,53 +34,85 @@ npm install
 npm start
 ```
 
-Frontend will be available at: `http://localhost:4006`
+✅ Frontend will be available at: `http://localhost:4006`
 
 ### 3. Access the Application
 
-1. Open `http://localhost:4000` in your browser
-2. Click "Login via Keycloak"
+1. Open `http://localhost:4006` in your browser
+2. Click **"Login via Keycloak"**
 3. You'll be redirected to Keycloak login page
-4. After successful authentication, you'll be redirected back to the dashboard
-
-### 4. Access from Other Devices
-
-To access from other devices on the same network:
-1. Add the host entry to the other device's hosts file:
-   ```
-   192.168.1.100 oauth2-demo.local  # Your machine's IP
-   ```
-2. Access via `http://oauth2-demo.local:4000`
+4. Enter your credentials
+5. After successful authentication, you'll be redirected back to the dashboard
 
 ## 🔧 Configuration
 
 ### Backend Configuration
-Edit `backend/src/main/resources/application.properties`:
-- Server port: `server.port=8080`
-- Keycloak URL: Update if different
-- CORS origins: Add additional origins if needed
+Key file: `backend/src/main/resources/application.properties`
+```properties
+# Server Configuration
+server.port=8080
+
+# CORS Configuration
+app.cors.allowed-origins=http://localhost:4006
+
+# Keycloak OAuth2 Configuration
+spring.security.oauth2.resourceserver.jwt.issuer-uri=https://keycloak.ccom.ipb.pt:8443/realms/ipbStudents
+keycloak.realm=ipbStudents
+keycloak.client-id=springKeycloakOauth2APP
+```
 
 ### Frontend Configuration
-Edit `frontend/src/config.ts`:
-- Keycloak URLs
-- Client ID
-- Redirect URIs
+Key file: `frontend/src/config.ts`
+```typescript
+export const keycloakConfig: KeycloakConfig = {
+  baseUrl: 'https://keycloak.ccom.ipb.pt:8443',
+  realm: 'ipbStudents',
+  clientId: 'springKeycloakOauth2APP',
+  redirectUri: 'http://localhost:4006/callback',
+  postLogoutRedirectUri: 'http://localhost:4006/',
+};
+```
+
+## 🧪 Testing & Debug
+
+### Debug Page
+Access `http://localhost:4006/debug` to:
+- Test Keycloak connectivity
+- Validate configuration
+- Debug authentication issues
+
+### API Health Check
+```bash
+curl http://localhost:8080/api/health
+```
 
 ## 🐛 Troubleshooting
 
 ### Common Issues
 
-1. **CORS Errors**: Check backend CORS configuration
-2. **Network Access**: Verify `/etc/hosts` configuration
-3. **Keycloak Connection**: Ensure Keycloak server is accessible
-4. **Authentication Errors**: Check Keycloak client configuration
+1. **"Authentication failed" Error**
+   - Check Keycloak client redirect URIs include `http://localhost:4006/*`
+   - Verify PKCE is enabled in Keycloak client settings
+   - Ensure client ID matches in both frontend and backend config
 
-### Debug Mode
-Enable debug logging in backend:
-```properties
-logging.level.org.springframework.security=DEBUG
-logging.level.com.example.keycloak=DEBUG
-```
+2. **CORS Errors**
+   - Verify `app.cors.allowed-origins=http://localhost:4006` in backend config
+   - Check that frontend is running on port 4006
+
+3. **Port Conflicts**
+   - If port 4006 is busy, update both:
+     - Frontend: `PORT=XXXX` in `package.json` start script
+     - Keycloak client: Add new port to redirect URIs
+
+4. **JWT Validation Errors**
+   - Check `issuer-uri` and `jwk-set-uri` in `application.properties`
+   - Verify Keycloak realm is accessible
+
+### Debug Steps
+1. Check browser console for errors
+2. Use the debug page at `/debug`
+3. Review backend logs for authentication issues
+4. Verify Keycloak client configuration
 
 ## 📚 API Endpoints
 
