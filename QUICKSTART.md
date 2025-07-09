@@ -126,21 +126,26 @@ curl http://localhost:8080/api/health
 
 ## 🎯 Features Included
 
-✅ Keycloak PKCE authentication flow  
-✅ JWT token validation  
-✅ Protected routes and API endpoints  
-✅ User profile management  
-✅ Responsive design  
-✅ Network accessibility  
-✅ Error handling  
-✅ Health monitoring  
+✅ **Keycloak PKCE authentication flow**  
+✅ **JWT token validation**  
+✅ **Protected routes and API endpoints**  
+✅ **User profile management**  
+✅ **Responsive design**  
+✅ **Error handling & debugging tools**  
+✅ **Health monitoring**  
 
 ## 🔐 Security Features
 
-- PKCE flow for enhanced security
-- JWT token validation
-- Automatic token refresh
-- CORS protection
-- Role-based access control
+- **PKCE flow** for enhanced OAuth2 security
+- **JWT token validation** for stateless authentication
+- **Automatic token refresh** for seamless user experience
+- **CORS protection** for secure cross-origin requests
+- **Role-based access control** via Keycloak
 
-Happy coding! 🚀
+## 📖 Need More Details?
+
+For comprehensive setup instructions, architecture details, and advanced configuration, see the main [README.md](./README.md).
+
+---
+
+**Happy Coding!** 🚀
